@@ -24,6 +24,16 @@ class CommentsPage extends Component {
     this.setState({ comments, article });
   }
 
+  async componentDidUpdate(_, prevState) {
+    if (prevState.comments !== this.state.comments) {
+      const comments = await api.getCommentsForArticle(
+        this.props.match.params.article_id
+      );
+
+      this.setState({ comments });
+    }
+  }
+
   render() {
     return (
       <div key={this.state.article_id} className="container">
@@ -49,7 +59,6 @@ class CommentsPage extends Component {
                   </p>
                   Posted {moment(comment.created_at).fromNow('LLL')}
                   <p>Votes: {comment.votes}</p>
-                  <p>{comment._id}</p>
                   <NumberContext.Consumer>
                     {val => (
                       <DeleteCommentFunc

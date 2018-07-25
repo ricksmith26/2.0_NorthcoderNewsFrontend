@@ -24,6 +24,16 @@ class CommentsPage extends Component {
     this.setState({ comments, article });
   }
 
+  async componentDidUpdate(_, prevState) {
+    if (prevState.comments !== this.state.comments) {
+      const comments = await api.getCommentsForArticle(
+        this.props.match.params.article_id
+      );
+
+      this.setState({ comments });
+    }
+  }
+
   render() {
     console.log('comment render');
     return (
